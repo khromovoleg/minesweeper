@@ -1,11 +1,14 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "target": "es5",
     "lib": [
       "dom",
       "dom.iterable",
       "esnext"
     ],
+    "rootDir": "src",
+    "outDir": "build",
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
@@ -22,5 +25,11 @@
   },
   "include": [
     "src"
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode",
+    "public",
+    "build"
   ]
 }

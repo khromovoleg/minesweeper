@@ -1,0 +1,13 @@
+{
+  "emmet.excludeLanguages": [
+     "markdown"
+  ],
+  "emmet.includeLanguages": {
+    "javascript": "javascriptreact",
+    "typescript": "typescriptreact"
+  },
+  "emmet.syntaxProfiles": {
+  },
+  "emmet.triggerExpansionOnTab": true,
+  "http.systemCertificates": false,
+}
