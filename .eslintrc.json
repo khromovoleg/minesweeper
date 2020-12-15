@@ -21,6 +21,8 @@
     "sourceType": "module"
   },
   "rules": {
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
     "no-debugger": "off",
     "no-console": 0,
     "react-hooks/exhaustive-deps": "off",

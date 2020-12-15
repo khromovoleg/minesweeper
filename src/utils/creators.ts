@@ -1,9 +1,13 @@
 import { call, put } from "redux-saga/effects";
 
-const types = [];
+const types: Array<string> = ["REQUESTED", "SUCCEEDED", "FAILED", "CLEARED"];
 
-export const actionConstantsCreator = (constArr: Array): void => {
-  const result = {};
+interface Result {
+  [key: string]: any;
+}
+
+export const actionConstantsCreator = (constArr: Array<string>): Result => {
+  const result: Result = {};
 
   constArr.forEach((constItem) => {
     result[constItem] = {};
@@ -12,16 +16,22 @@ export const actionConstantsCreator = (constArr: Array): void => {
     });
   });
 
+  console.log(result);
+
   return result;
 };
 
-export const actionCreator = (constArr: Array): void => {
-  const result = {};
+export const actionCreator = (constArr: Array<string>): Result => {
+  const result: Result = {};
 
   constArr.forEach((constItem) => {
     result[constItem] = {};
     types.forEach((typeItem) => {
-      result[constItem][typeItem] = (payload = {}, callback, options) => ({
+      result[constItem][typeItem] = (
+        payload = {},
+        callback: any,
+        options: any
+      ) => ({
         type: `${constItem}_${typeItem}`,
         payload,
         callback,
@@ -30,19 +40,17 @@ export const actionCreator = (constArr: Array): void => {
     });
   });
 
+  console.log(result);
+
   return result;
 };
 
-export function* sagaAssessor(
-  request: void,
-  failure: void,
-  callback: void
-): void {
+export function* sagaAssessor(request: any, failure: any, callback: any): any {
   try {
     yield call(request());
   } catch (e) {
     yield put(failure(e));
   } finally {
-    callback & (typeof callback === "function") && callback();
+    callback & ((typeof callback === "function") as any) && callback();
   }
 }

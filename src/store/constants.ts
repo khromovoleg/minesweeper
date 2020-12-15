@@ -1,10 +1,18 @@
 import { actionConstantsCreator } from "utils";
 
-const GAMES: Array<string> = [""];
+const GAME: Array<string> = ["GAME"];
 
-export const compose = [...GAMES];
+export const compose = [...GAME];
 export const constants = actionConstantsCreator(compose);
 
 export const initialState = {
-  game: {},
+  game: {
+    board: {
+      cols: 0,
+      rows: 0,
+    },
+    mines: 0,
+    loading: false,
+    error: null,
+  },
 };

@@ -1,10 +1,10 @@
 import React, { BaseSyntheticEvent } from "react";
 
-import { push } from "connected-react-router";
+//import { push } from "connected-react-router";
 import { useDispatch } from "react-redux";
 import { Formik } from "formik";
 
-import { ROUTES_PATH } from "router/constants";
+import { actions } from "store/actions";
 import { FORMS } from "utils";
 
 interface FormDataType {
@@ -13,13 +13,9 @@ interface FormDataType {
 
 const Welcome: React.FC = () => {
   const dispatch = useDispatch();
-  //const [isWelcome, setIsWelcome] = useState(true);
 
   const handleSubmit = (data: FormDataType) => {
-    console.log(data);
-    dispatch(push(ROUTES_PATH.GAME));
-    //setIsWelcome(false);
-    //generateBoard(data);
+    dispatch(actions.GAME.REQUESTED(data));
   };
 
   return (

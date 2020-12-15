@@ -1,12 +1,13 @@
 import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
-import { RouteComponentProps } from "react-router-dom";
+import { History } from "../../node_modules/history";
 
-const rootReducer = (history: RouteComponentProps): void => {
-  console.log(history);
+import { GameReducer } from "components/store";
+
+const rootReducer = (history: History) =>
   combineReducers({
     router: connectRouter(history),
+    gameReducer: GameReducer,
   });
-};
 
 export default rootReducer;
