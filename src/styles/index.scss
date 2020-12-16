@@ -24,7 +24,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  min-height: 100%;
   width: 100%;
   margin: 0 auto;
 }
@@ -97,5 +97,52 @@ body {
   &__table {
     display: flex;
     justify-content: center;
+  }
+
+  &__panel {
+    display: flex;
+    margin: 0 0 30px;
+  }
+
+  &__panel-column {
+    display: flex;
+    margin: 0 40px 0 0;
+
+    &:last-child {
+      margin: 0 0 0 auto;
+    }
+  }
+
+  &__panel-label {
+    margin: 0 10px 0 0;
+  }
+
+  &__panel-value {
+    font-weight: 500;
+  }
+}
+
+.table {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__row {
+    display: flex;
+    height: 100%;
+  }
+
+  &__cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    text-align: center;
+    height: 50px;
+    width: 50px;
+    padding: 10px;
+    background: gray;
+    cursor: pointer;
+    border: 1px solid white;
   }
 }

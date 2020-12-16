@@ -8,7 +8,8 @@ export const generateBoard = (data: FormData): void => {
     const count_rows = rows;
     const count_cols = cols;
     const count_mines = mines;
-    const table = document.createElement("table");
+    const table = document.createElement("div");
+    table.className = "table";
 
     // generate mines
     const minesArray = [];
@@ -34,7 +35,8 @@ export const generateBoard = (data: FormData): void => {
     // generate grid
     table.innerHTML = "";
     for (let r = 0; r < count_rows; r++) {
-      const tr = document.createElement("tr");
+      const tr = document.createElement("div");
+      tr.className = "table__row";
       for (let c = 0; c < count_cols; c++) {
         let contains_mine = false;
         for (let j = 0; j < minesArray.length; j++) {
@@ -42,7 +44,8 @@ export const generateBoard = (data: FormData): void => {
             contains_mine = true;
         }
         if (contains_mine) {
-          const td = document.createElement("td");
+          const td = document.createElement("div");
+          td.className = "table__cell";
           const cell = document.createTextNode("M");
           td.appendChild(cell);
           tr.appendChild(td);
@@ -60,12 +63,14 @@ export const generateBoard = (data: FormData): void => {
             }
           }
           if (number == 0) {
-            const td = document.createElement("td");
+            const td = document.createElement("div");
+            td.className = "table__cell";
             const cell = document.createTextNode("&nbsp;");
             td.appendChild(cell);
             tr.appendChild(td);
           } else {
-            const td = document.createElement("td");
+            const td = document.createElement("div");
+            td.className = "table__cell";
             const cell = document.createTextNode(number.toString());
             td.appendChild(cell);
             tr.appendChild(td);
