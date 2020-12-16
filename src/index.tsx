@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import { ConnectedRouter } from "connected-react-router";
 
-import history from "./history";
+import history from "./history_";
 import store from "./store";
 
 import "./index.css";

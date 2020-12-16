@@ -30,7 +30,7 @@ export const generateBoard = (data: FormData): void => {
       minesArray.push(new_mine);
     }
 
-    console.log(minesArray);
+    //console.log(minesArray);
     // generate grid
     table.innerHTML = "";
     for (let r = 0; r < count_rows; r++) {
@@ -46,8 +46,8 @@ export const generateBoard = (data: FormData): void => {
           const cell = document.createTextNode("M");
           td.appendChild(cell);
           tr.appendChild(td);
-          console.log("td", td);
-          console.log("cell", cell);
+          //console.log("td", td);
+          //console.log("cell", cell);
         } else {
           // calculate number of ajacent mines
           let number = 0;

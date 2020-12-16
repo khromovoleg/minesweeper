@@ -1,6 +1,6 @@
 import { combineReducers } from "redux";
 import { connectRouter } from "connected-react-router";
-import { History } from "../../node_modules/history";
+import { History } from "history";
 
 import { GameReducer } from "components/store";
 

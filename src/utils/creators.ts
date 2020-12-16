@@ -16,8 +16,6 @@ export const actionConstantsCreator = (constArr: Array<string>): Result => {
     });
   });
 
-  console.log(result);
-
   return result;
 };
 
@@ -39,8 +37,6 @@ export const actionCreator = (constArr: Array<string>): Result => {
       });
     });
   });
-
-  console.log(result);
 
   return result;
 };

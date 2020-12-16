@@ -11,10 +11,9 @@ const SetSettings = ({ payload, callback }: any) =>
   sagaAssessor(
     () =>
       function* () {
-        console.log(1);
         yield put(actions.GAME.SUCCEEDED(payload));
         yield put(push(ROUTES_PATH.GAME));
-        //localStorage.setItem("token", token);
+        //localStorage.setItem("board", JSON.stringify(payload));
       },
     actions.GAME.FAILED,
     callback

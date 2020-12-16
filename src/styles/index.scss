@@ -1,0 +1,101 @@
+@import "./variables.scss";
+@import "./mixins.scss";
+
+html,
+body,
+#root {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial;
+  font-size: 14px;
+  line-height: 20px;
+  min-width: 320px;
+}
+
+.app {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.container {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 20px 100px;
+}
+
+.title {
+  text-align: center;
+}
+
+.welcome {
+
+  &__description {
+    text-align: center;
+  }
+
+  &__form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    width: 100%;
+    margin: 0 auto;
+  }
+}
+
+.form {
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    margin: 0 0 20px;
+
+    &--btn {
+      justify-content: center;
+    }
+  }
+
+  &__label {
+    width: 20%;
+    flex-shrink: 0;
+    margin: 0 20px 0 0;
+    text-align: right;
+  }
+
+  &__input {
+    flex: 1;
+    max-width: 330px;
+  }
+
+  &__error {
+    display: flex;
+    width: 100%;
+    font-size: 12px;
+    color: red;
+  }
+
+  &__btn {
+    width: 100%;
+    max-width: 150px;
+  }
+}
+
+.board {
+
+  &__table {
+    display: flex;
+    justify-content: center;
+  }
+}

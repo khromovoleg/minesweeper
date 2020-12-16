@@ -1,11 +1,12 @@
 import React, { BaseSyntheticEvent } from "react";
 
-//import { push } from "connected-react-router";
 import { useDispatch } from "react-redux";
-import { Formik } from "formik";
+import { Formik, Form } from "formik";
 
 import { actions } from "store/actions";
 import { FORMS } from "utils";
+
+import "styles/index.scss";
 
 interface FormDataType {
   [key: string]: number | string;
@@ -19,14 +20,14 @@ const Welcome: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="welcome">
       <Formik
+        enableReinitialize={true}
         initialValues={FORMS.BOARD_SIZE.INIT}
         validationSchema={FORMS.BOARD_SIZE.SCHEME}
         onSubmit={handleSubmit}
       >
         {({
-          handleSubmit,
           errors,
           touched,
           values: { cols, rows, mines },
@@ -43,53 +44,64 @@ const Welcome: React.FC = () => {
 
           return (
             <>
-              <h2>Welcome</h2>
-              <p>Set Field size:</p>
-              <div>
-                <form onSubmit={handleSubmit}>
-                  <div>
-                    <label htmlFor="labelCols">Columns:</label>
+              <h1 className="title">Welcome</h1>
+              <p className="welcome__description">Set Board size:</p>
+              <div className="welcome__form">
+                <Form className="form">
+                  <div className="form__row">
+                    <label htmlFor="labelCols" className="form__label">
+                      Columns:
+                    </label>
                     <input
                       id="labelCols"
                       type="text"
                       name="cols"
                       value={cols}
+                      className="form__input"
                       onChange={handleChangeField}
                     />
                     {errors.cols && touched.cols && (
-                      <span className="error">{errors.cols}</span>
+                      <span className="form__error">{errors.cols}</span>
                     )}
                   </div>
-                  <div>
-                    <label htmlFor="labelRows">Rows:</label>
+                  <div className="form__row">
+                    <label htmlFor="labelRows" className="form__label">
+                      Rows:
+                    </label>
                     <input
                       id="labelRows"
                       type="text"
                       name="rows"
                       value={rows}
+                      className="form__input"
                       onChange={handleChangeField}
                     />
                     {errors.rows && touched.rows && (
-                      <span className="error">{errors.rows}</span>
+                      <span className="form__error">{errors.rows}</span>
                     )}
                   </div>
-                  <div>
-                    <label htmlFor="labelMines">Mines:</label>
+                  <div className="form__row">
+                    <label htmlFor="labelMines" className="form__label">
+                      Mines:
+                    </label>
                     <input
                       id="labelMines"
                       type="text"
                       name="mines"
                       value={mines}
+                      className="form__input"
                       onChange={handleChangeField}
                     />
                     {errors.mines && touched.mines && (
-                      <span className="error">{errors.mines}</span>
+                      <span className="form__error">{errors.mines}</span>
                     )}
                   </div>
-                  <div>
-                    <button type="submit">OK</button>
+                  <div className="form__row form__row--btn">
+                    <button type="submit" className="btn form__btn">
+                      OK
+                    </button>
                   </div>
-                </form>
+                </Form>
               </div>
             </>
           );

@@ -10,4 +10,5 @@
   },
   "emmet.triggerExpansionOnTab": true,
   "http.systemCertificates": false,
+  "typescript.tsdk": "./node_modules/typescript/lib",
 }

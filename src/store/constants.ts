@@ -7,11 +7,7 @@ export const constants = actionConstantsCreator(compose);
 
 export const initialState = {
   game: {
-    board: {
-      cols: 0,
-      rows: 0,
-    },
-    mines: 0,
+    board: {},
     loading: false,
     error: null,
   },
