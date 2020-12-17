@@ -13,7 +13,7 @@ const SetSettings = ({ payload, callback }: any) =>
       function* () {
         yield put(actions.GAME.SUCCEEDED(payload));
         yield put(push(ROUTES_PATH.GAME));
-        //localStorage.setItem("board", JSON.stringify(payload));
+        localStorage.setItem("board", JSON.stringify(payload));
       },
     actions.GAME.FAILED,
     callback

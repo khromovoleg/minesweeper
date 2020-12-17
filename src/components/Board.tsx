@@ -6,17 +6,22 @@ import { isEmpty } from "lodash";
 
 import { generateBoard } from "utils";
 import { getBoard } from "components/store/selectors";
-//import { actions } from "store/actions";
+import { actions } from "store/actions";
 import { ROUTES_PATH } from "router/constants";
 
 import "styles/index.scss";
 
 const Board: React.FC = () => {
   const dispatch = useDispatch();
-  const board = useSelector(getBoard());
-  const { rows, cols, mines } = board;
   const [time, setTime] = useState(0);
   const [startTime] = useState(new Date().getTime());
+  let board = useSelector(getBoard());
+  const { rows, cols, mines } = board;
+
+  if (isEmpty(board)) {
+    board = JSON.parse((localStorage as any).getItem("board"));
+    dispatch(actions.GAME.REQUESTED(board));
+  }
 
   useEffect(() => {
     if (!isEmpty(board)) {
@@ -34,13 +39,20 @@ const Board: React.FC = () => {
   }, [time]);
 
   const timeFormat = (time: any) => {
-    let hours: any = (time / (1000 * 60 * 60)).toFixed(0);
-    let minutes: any = (time / (1000 * 60)).toFixed(0);
     let seconds: any = (time / 1000).toFixed(0);
+    let minutes: any = Math.floor(seconds / 60);
+    let hours: any = "";
 
-    hours = hours < 10 ? "0" + hours : hours;
-    minutes = minutes < 10 ? "0" + minutes : minutes;
-    seconds = seconds < 10 ? "0" + seconds : seconds;
+    if (minutes > 59) {
+      hours = Math.floor(minutes / 60);
+      minutes = minutes - hours * 60;
+    }
+
+    seconds = Math.floor(seconds % 60);
+
+    hours = hours >= 10 ? hours : "0" + hours;
+    minutes = minutes >= 10 ? minutes : "0" + minutes;
+    seconds = seconds >= 10 ? seconds : "0" + seconds;
 
     return hours + ":" + minutes + ":" + seconds;
   };
