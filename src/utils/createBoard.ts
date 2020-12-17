@@ -45,9 +45,9 @@ export const generateBoard = (data: FormData): void => {
         }
         if (contains_mine) {
           const td = document.createElement("div");
-          td.className = "table__cell";
-          const cell = document.createTextNode("M");
-          td.appendChild(cell);
+          td.className = "table__cell table__cell--mine";
+          // const cell = document.createTextNode("M");
+          // td.appendChild(cell);
           tr.appendChild(td);
           //console.log("td", td);
           //console.log("cell", cell);
@@ -65,14 +65,14 @@ export const generateBoard = (data: FormData): void => {
           if (number == 0) {
             const td = document.createElement("div");
             td.className = "table__cell";
-            const cell = document.createTextNode("&nbsp;");
-            td.appendChild(cell);
+            // const cell = document.createTextNode("");
+            // td.appendChild(cell);
             tr.appendChild(td);
           } else {
             const td = document.createElement("div");
-            td.className = "table__cell";
-            const cell = document.createTextNode(number.toString());
-            td.appendChild(cell);
+            td.className = `table__cell table__cell--n table__cell--n-${number.toString()}`;
+            // const cell = document.createTextNode(number.toString());
+            // td.appendChild(cell);
             tr.appendChild(td);
           }
         }

@@ -40,7 +40,6 @@ body {
 }
 
 .welcome {
-
   &__description {
     text-align: center;
   }
@@ -55,7 +54,6 @@ body {
 }
 
 .form {
-
   &__row {
     display: flex;
     flex-wrap: wrap;
@@ -93,7 +91,6 @@ body {
 }
 
 .board {
-
   &__table {
     display: flex;
     justify-content: center;
@@ -141,8 +138,91 @@ body {
     height: 50px;
     width: 50px;
     padding: 10px;
-    background: gray;
+    //background: #f3f3f3;
+    background: #ccc;
+    border: 1px solid #ccc;
     cursor: pointer;
-    border: 1px solid white;
+    margin: 1px;
+    position: relative;
+
+    &--flag:before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #ccc no-repeat url("./icons/flag.svg") center center;
+      width: 20px;
+      height: 20px;
+    }
+
+    &--open {
+      background: #f3f3f3;
+
+      &.table__cell--mine:before,
+      &.table__cell--n:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+      }
+  
+      &.table__cell--mine:before {
+        background: no-repeat url("./icons/bomb.svg") center center;
+        //content: no-repeat url("./icons/bomb.svg") center center;
+        width: 20px;
+        height: 20px;
+      }
+  
+      &.table__cell--n:before {
+        color: white;
+      }
+  
+      &.table__cell--n-1:before {
+        content: "1";
+        color: blue;
+      }
+  
+      &.table__cell--n-2:before {
+        content: "2";
+        color: green;
+      }
+  
+      &.table__cell--n-3:before {
+        content: "3";
+        color: red;
+      }
+  
+      &.table__cell--n-4:before {
+        content: "4";
+        color: rgb(1, 1, 80);
+      }
+  
+      &.table__cell--n-5:before {
+        content: "5";
+        color: rgb(43, 0, 32);
+      }
+  
+      &.table__cell--n-6:before {
+        content: "6";
+      }
+  
+      &.table__cell--n-7:before {
+        content: "7";
+      }
+  
+      &.table__cell--n-8:before {
+        content: "8";
+      }
+  
+      &.table__cell--n-9:before {
+        content: "9";
+      }
+  
+      &.table__cell--n-10:before {
+        content: "10";
+      }
+    }
   }
 }
