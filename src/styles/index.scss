@@ -98,7 +98,7 @@ body {
 
   &__panel {
     display: flex;
-    margin: 0 0 30px;
+    margin: 0 0 10px;
   }
 
   &__panel-column {
@@ -116,6 +116,16 @@ body {
 
   &__panel-value {
     font-weight: 500;
+  }
+
+  &__btn-pause-wrap {
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 0 30px;
+  }
+
+  &__btn-pause {
+    min-width: 100px;
   }
 }
 
@@ -167,59 +177,59 @@ body {
         left: 50%;
         transform: translate(-50%, -50%);
       }
-  
+
       &.table__cell--mine:before {
         background: no-repeat url("./icons/bomb.svg") center center;
         //content: no-repeat url("./icons/bomb.svg") center center;
         width: 20px;
         height: 20px;
       }
-  
+
       &.table__cell--n:before {
         color: white;
       }
-  
+
       &.table__cell--n-1:before {
         content: "1";
         color: blue;
       }
-  
+
       &.table__cell--n-2:before {
         content: "2";
         color: green;
       }
-  
+
       &.table__cell--n-3:before {
         content: "3";
         color: red;
       }
-  
+
       &.table__cell--n-4:before {
         content: "4";
         color: rgb(1, 1, 80);
       }
-  
+
       &.table__cell--n-5:before {
         content: "5";
         color: rgb(43, 0, 32);
       }
-  
+
       &.table__cell--n-6:before {
         content: "6";
       }
-  
+
       &.table__cell--n-7:before {
         content: "7";
       }
-  
+
       &.table__cell--n-8:before {
         content: "8";
       }
-  
+
       &.table__cell--n-9:before {
         content: "9";
       }
-  
+
       &.table__cell--n-10:before {
         content: "10";
       }

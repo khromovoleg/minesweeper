@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { BaseSyntheticEvent, useEffect, useState } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
@@ -14,8 +14,9 @@ import "styles/index.scss";
 const Board: React.FC = () => {
   const dispatch = useDispatch();
   const [time, setTime] = useState(0);
-  const [startTime] = useState(new Date().getTime());
+  const [timerWork, setTimerWork] = useState(true);
   let board = useSelector(getBoard());
+  let intervalId: any = null;
   const { rows, cols, mines } = board;
 
   if (isEmpty(board)) {
@@ -30,16 +31,19 @@ const Board: React.FC = () => {
   }, [board]);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      const curTime: any = new Date().getTime();
-      setTime(curTime - startTime);
-    }, 1000);
+    if (timerWork) {
+      intervalId = setInterval(() => {
+        setTime((time) => time + 1);
+      }, 1000);
+    } else {
+      clearInterval(intervalId);
+    }
 
     return () => clearInterval(intervalId);
-  }, [time]);
+  }, [timerWork]);
 
   const timeFormat = (time: any) => {
-    let seconds: any = (time / 1000).toFixed(0);
+    let seconds: any = time;
     let minutes: any = Math.floor(seconds / 60);
     let hours: any = "";
 
@@ -55,6 +59,17 @@ const Board: React.FC = () => {
     seconds = seconds >= 10 ? seconds : "0" + seconds;
 
     return hours + ":" + minutes + ":" + seconds;
+  };
+
+  const handleTimerPause = (e: BaseSyntheticEvent) => {
+    let buttonText = "Play";
+
+    if (!timerWork) {
+      buttonText = "Pause";
+    }
+
+    e.currentTarget.textContent = buttonText;
+    setTimerWork(!timerWork);
   };
 
   return (
@@ -77,6 +92,15 @@ const Board: React.FC = () => {
               <span className="board__panel-label">Время:</span>
               <span className="board__panel-value">{timeFormat(time)}</span>
             </div>
+          </div>
+          <div className="board__btn-pause-wrap">
+            <button
+              type="button"
+              onClick={handleTimerPause}
+              className="board__btn-pause"
+            >
+              Pause
+            </button>
           </div>
           <div id="table" className="board__table"></div>
         </>
