@@ -4,62 +4,27 @@ import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { isEmpty } from "lodash";
 
-import { generateBoard } from "utils";
+import { GenerateBoard } from "utils";
 import { getBoard } from "components/store/selectors";
 import { actions } from "store/actions";
 import { ROUTES_PATH } from "router/constants";
+
+import Timer from "components/Timer";
 
 import "styles/index.scss";
 
 const Board: React.FC = () => {
   const dispatch = useDispatch();
-  const [time, setTime] = useState(0);
-  const [timerWork, setTimerWork] = useState(true);
   let board = useSelector(getBoard());
-  let intervalId: any = null;
+  //let createTable: any = "";
   const { rows, cols, mines } = board;
+  const [countMains, setCountMines] = useState(mines);
+  const [timerWork, setTimerWork] = useState(true);
 
   if (isEmpty(board)) {
     board = JSON.parse((localStorage as any).getItem("board"));
     dispatch(actions.GAME.REQUESTED(board));
   }
-
-  useEffect(() => {
-    if (!isEmpty(board)) {
-      generateBoard(board);
-    }
-  }, [board]);
-
-  useEffect(() => {
-    if (timerWork) {
-      intervalId = setInterval(() => {
-        setTime((time) => time + 1);
-      }, 1000);
-    } else {
-      clearInterval(intervalId);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [timerWork]);
-
-  const timeFormat = (time: any) => {
-    let seconds: any = time;
-    let minutes: any = Math.floor(seconds / 60);
-    let hours: any = "";
-
-    if (minutes > 59) {
-      hours = Math.floor(minutes / 60);
-      minutes = minutes - hours * 60;
-    }
-
-    seconds = Math.floor(seconds % 60);
-
-    hours = hours >= 10 ? hours : "0" + hours;
-    minutes = minutes >= 10 ? minutes : "0" + minutes;
-    seconds = seconds >= 10 ? seconds : "0" + seconds;
-
-    return hours + ":" + minutes + ":" + seconds;
-  };
 
   const handleTimerPause = (e: BaseSyntheticEvent) => {
     let buttonText = "Play";
@@ -71,6 +36,12 @@ const Board: React.FC = () => {
     e.currentTarget.textContent = buttonText;
     setTimerWork(!timerWork);
   };
+
+  // useEffect(() => {
+  //   if (!isEmpty(board)) {
+  //     createTable = generateBoard(board);
+  //   }
+  // }, [board]);
 
   return (
     <div className="board">
@@ -86,11 +57,13 @@ const Board: React.FC = () => {
             </div>
             <div className="board__panel-column">
               <span className="board__panel-label">Мины:</span>
-              <span className="board__panel-value">{mines}</span>
+              <span className="board__panel-value">{countMains}</span>
             </div>
             <div className="board__panel-column">
               <span className="board__panel-label">Время:</span>
-              <span className="board__panel-value">{timeFormat(time)}</span>
+              <span className="board__panel-value">
+                <Timer timerWork={timerWork} />
+              </span>
             </div>
           </div>
           <div className="board__btn-pause-wrap">
@@ -102,7 +75,9 @@ const Board: React.FC = () => {
               Pause
             </button>
           </div>
-          <div id="table" className="board__table"></div>
+          <div id="table" className="board__table">
+            <GenerateBoard {...board} setCountMines={setCountMines} />
+          </div>
         </>
       ) : (
         <div>

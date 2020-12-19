@@ -132,11 +132,47 @@ body {
 .table {
   display: flex;
   flex-direction: column;
-  width: 100%;
+  //width: 100%;
 
   &__row {
     display: flex;
     height: 100%;
+
+    &:nth-child(even) {
+      .table__cell {
+        background: #aad751;
+
+        &:nth-child(even) {
+          background: #a2d149;
+
+          &.table__cell--open {
+            background: #d7b899;
+          }
+        }
+
+        &.table__cell--open {
+          background: #e5c29f;
+        }
+      }
+    }
+
+    &:nth-child(odd) {
+      .table__cell {
+        background: #a2d149;
+
+        &:nth-child(even) {
+          background: #aad751;
+
+          &.table__cell--open {
+            background: #e5c29f;
+          }
+        }
+
+        &.table__cell--open {
+          background: #d7b899;
+        }
+      }
+    }
   }
 
   &__cell {
@@ -145,15 +181,15 @@ body {
     justify-content: center;
     flex: 1;
     text-align: center;
-    height: 50px;
-    width: 50px;
-    padding: 10px;
-    //background: #f3f3f3;
-    background: #ccc;
-    border: 1px solid #ccc;
+    height: 30px;
+    width: 30px;
     cursor: pointer;
-    margin: 1px;
     position: relative;
+    transition: all .1s ease-out;
+
+    &:hover:not(.table__cell--open) {
+      background: #bce077 !important;
+    }
 
     &--flag:before {
       content: "";
@@ -161,14 +197,12 @@ body {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background: #ccc no-repeat url("./icons/flag.svg") center center;
+      background: no-repeat url("./icons/flag.svg") center center;
       width: 20px;
       height: 20px;
     }
 
     &--open {
-      background: #f3f3f3;
-
       &.table__cell--mine:before,
       &.table__cell--n:before {
         content: "";
@@ -180,38 +214,39 @@ body {
 
       &.table__cell--mine:before {
         background: no-repeat url("./icons/bomb.svg") center center;
-        //content: no-repeat url("./icons/bomb.svg") center center;
         width: 20px;
         height: 20px;
       }
 
       &.table__cell--n:before {
         color: white;
+        font-size: 22px;
+        font-weight: 500;
       }
 
       &.table__cell--n-1:before {
         content: "1";
-        color: blue;
+        color: #1976d2;
       }
 
       &.table__cell--n-2:before {
         content: "2";
-        color: green;
+        color: #388e3c;
       }
 
       &.table__cell--n-3:before {
         content: "3";
-        color: red;
+        color: #d32f2f;
       }
 
       &.table__cell--n-4:before {
         content: "4";
-        color: rgb(1, 1, 80);
+        color: #7b1fa2;
       }
 
       &.table__cell--n-5:before {
         content: "5";
-        color: rgb(43, 0, 32);
+        color: #fe9209;
       }
 
       &.table__cell--n-6:before {
