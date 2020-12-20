@@ -1,6 +1,15 @@
 import { call, put } from "redux-saga/effects";
 
-const types: Array<string> = ["REQUESTED", "SUCCEEDED", "FAILED", "CLEARED"];
+const types: Array<string> = [
+  "REQUESTED",
+  "SUCCEEDED",
+  "FAILED",
+  "CLEARED",
+  "UPDATED_MINES",
+  "UPDATED_TIMES",
+  "UPDATED_CELL_OPEN",
+  "UPDATED_CELL_FLAG",
+];
 
 interface Result {
   [key: string]: any;

@@ -1,27 +1,33 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
+
+import { useDispatch } from "react-redux";
+
+import { actions } from "store/actions";
 
 interface MyProps {
   timerWork: boolean;
+  times: any;
 }
 
-const Timer: React.FC<MyProps> = ({ timerWork }: MyProps) => {
-  const [time, setTime] = useState(0);
+const Timer: React.FC<MyProps> = ({ timerWork, times }: MyProps) => {
+  //const [time, setTime] = useState(0);
+  const dispatch = useDispatch();
   let intervalId: any = null;
 
   useEffect(() => {
     if (timerWork) {
       intervalId = setInterval(() => {
-        setTime((t) => t + 1);
+        dispatch(actions.GAME.UPDATED_TIMES(times + 1));
       }, 1000);
     } else {
       clearInterval(intervalId);
     }
 
     return () => clearInterval(intervalId);
-  }, [timerWork]);
+  }, [timerWork, times]);
 
-  const timeFormat = (time: any) => {
-    let seconds: any = time;
+  const timeFormat = (times: any) => {
+    let seconds: any = times;
     let minutes: any = Math.floor(seconds / 60);
     let hours: any = "";
 
@@ -39,7 +45,7 @@ const Timer: React.FC<MyProps> = ({ timerWork }: MyProps) => {
     return hours + ":" + minutes + ":" + seconds;
   };
 
-  return <>{timeFormat(time)}</>;
+  return <>{timeFormat(times)}</>;
 };
 
 export default Timer;

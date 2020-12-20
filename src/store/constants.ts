@@ -7,7 +7,12 @@ export const constants = actionConstantsCreator(compose);
 
 export const initialState = {
   game: {
-    board: {},
+    settings: {},
+    game: {
+      flags: null,
+      times: 0,
+      board: {},
+    },
     loading: false,
     error: null,
   },

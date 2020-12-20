@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 
 import { actions } from "store/actions";
-import { FORMS } from "utils";
+import { FORMS, generateGame } from "utils";
 
 import "styles/index.scss";
 
@@ -16,7 +16,13 @@ const Welcome: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = (data: FormDataType) => {
-    dispatch(actions.GAME.REQUESTED(data));
+    const game = generateGame(data);
+    dispatch(
+      actions.GAME.REQUESTED({
+        settings: data,
+        game: { board: game, flags: data.mines, times: 0 },
+      })
+    );
   };
 
   return (

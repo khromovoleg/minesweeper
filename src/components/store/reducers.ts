@@ -11,7 +11,8 @@ export default (state = initialState.game, action: any) => {
     case constants.GAME.SUCCEEDED:
       return {
         ...state,
-        board: action.payload,
+        settings: action.payload.settings,
+        game: action.payload.game,
         loading: false,
         error: null,
       };
