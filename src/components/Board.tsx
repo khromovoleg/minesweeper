@@ -3,6 +3,7 @@ import React, { BaseSyntheticEvent, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { isEmpty } from "lodash";
+import useSound from "use-sound";
 
 import { GenerateBoard } from "utils";
 import { getGame } from "components/store/selectors";
@@ -10,6 +11,12 @@ import { actions } from "store/actions";
 import { ROUTES_PATH } from "router/constants";
 
 import Timer from "components/Timer";
+
+import soundFlagFile from "sounds/soundFlag.wav";
+import soundMineFile from "sounds/soundMine.wav";
+import soundMouseClickFile from "sounds/soundMouseClick.wav";
+import soundBtnClickFile from "sounds/soundBtnClick.wav";
+import soundErrorFile from "sounds/soundError.wav";
 
 import "styles/index.scss";
 
@@ -19,6 +26,12 @@ const Board: React.FC = () => {
   const { rows, cols } = settings;
   const { board, flags, times, play } = game;
   const [playError, setPlayError] = useState(false);
+
+  const [soundFlag] = useSound(soundFlagFile);
+  const [soundMine] = useSound(soundMineFile);
+  const [soundMouseClick] = useSound(soundMouseClickFile);
+  const [soundBtnClick] = useSound(soundBtnClickFile);
+  const [soundError] = useSound(soundErrorFile);
 
   if (isEmpty(settings)) {
     const minesweeper = JSON.parse(
@@ -44,6 +57,8 @@ const Board: React.FC = () => {
       setPlayError(false);
     }
 
+    soundBtnClick();
+
     e.currentTarget.textContent = buttonText;
   };
 
@@ -52,11 +67,17 @@ const Board: React.FC = () => {
       const classes = e.target.classList;
       const classOpen = "table__cell--open";
       const classFlag = "table__cell--flag";
+      const classMine = "table__cell--mine";
       const coordinats = e.currentTarget.dataset.cell.split("-");
 
       if (e.type === "click") {
         if (!classes.contains(classOpen) && !classes.contains(classFlag)) {
           classes.add(classOpen);
+          if (!classes.contains(classMine)) {
+            soundMouseClick();
+          } else {
+            soundMine();
+          }
           dispatch(
             actions.GAME.UPDATED_CELL_OPEN({
               row: coordinats[0],
@@ -66,6 +87,7 @@ const Board: React.FC = () => {
         }
       } else if (e.type === "contextmenu") {
         e.preventDefault();
+        soundFlag();
         if (!classes.contains(classOpen)) {
           let flagsCount = flags;
           if (!classes.contains(classFlag)) {
@@ -85,6 +107,7 @@ const Board: React.FC = () => {
         }
       }
     } else {
+      soundError();
       setPlayError(true);
     }
   };
