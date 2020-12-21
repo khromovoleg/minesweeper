@@ -5,17 +5,17 @@ import { useDispatch } from "react-redux";
 import { actions } from "store/actions";
 
 interface MyProps {
-  timerWork: boolean;
+  play: boolean;
   times: any;
 }
 
-const Timer: React.FC<MyProps> = ({ timerWork, times }: MyProps) => {
+const Timer: React.FC<MyProps> = ({ play, times }: MyProps) => {
   //const [time, setTime] = useState(0);
   const dispatch = useDispatch();
   let intervalId: any = null;
 
   useEffect(() => {
-    if (timerWork) {
+    if (play) {
       intervalId = setInterval(() => {
         dispatch(actions.GAME.UPDATED_TIMES(times + 1));
       }, 1000);
@@ -24,7 +24,7 @@ const Timer: React.FC<MyProps> = ({ timerWork, times }: MyProps) => {
     }
 
     return () => clearInterval(intervalId);
-  }, [timerWork, times]);
+  }, [play, times]);
 
   const timeFormat = (times: any) => {
     let seconds: any = times;

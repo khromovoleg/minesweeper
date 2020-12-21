@@ -55,5 +55,8 @@ export const generateGame = (props: any) => {
     }
   }
 
-  return cellsArray;
+  return {
+    game: cellsArray,
+    mines: minesArray,
+  };
 };

@@ -120,12 +120,17 @@ body {
 
   &__btn-pause-wrap {
     display: flex;
-    justify-content: flex-end;
+    align-items: flex-end;
+    flex-direction: column;
     margin: 0 0 30px;
   }
 
   &__btn-pause {
     min-width: 100px;
+  }
+
+  &__text-error {
+    margin: 10px 0 0;
   }
 }
 

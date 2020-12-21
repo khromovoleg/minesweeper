@@ -13,6 +13,7 @@ export default (state = initialState.game, action: any) => {
         ...state,
         settings: action.payload.settings,
         game: action.payload.game,
+        mines: action.payload.mines,
         loading: false,
         error: null,
       };

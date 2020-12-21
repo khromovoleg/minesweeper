@@ -9,6 +9,7 @@ const types: Array<string> = [
   "UPDATED_TIMES",
   "UPDATED_CELL_OPEN",
   "UPDATED_CELL_FLAG",
+  "UPDATED_TIMER_ACTION",
 ];
 
 interface Result {

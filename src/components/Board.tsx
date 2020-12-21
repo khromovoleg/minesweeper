@@ -17,9 +17,8 @@ const Board: React.FC = () => {
   const dispatch = useDispatch();
   const { settings, game } = useSelector(getGame());
   const { rows, cols } = settings;
-  const { board, flags, times } = game;
-
-  const [timerWork, setTimerWork] = useState(true);
+  const { board, flags, times, play } = game;
+  const [playError, setPlayError] = useState(false);
 
   if (isEmpty(settings)) {
     const minesweeper = JSON.parse(
@@ -30,6 +29,7 @@ const Board: React.FC = () => {
         actions.GAME.REQUESTED({
           settings: minesweeper.settings,
           game: minesweeper.game,
+          mines: minesweeper.mines,
         })
       );
     }
@@ -37,36 +37,36 @@ const Board: React.FC = () => {
 
   const handleTimerPause = (e: BaseSyntheticEvent) => {
     let buttonText = "Play";
+    dispatch(actions.GAME.UPDATED_TIMER_ACTION(play));
 
-    if (!timerWork) {
+    if (!play) {
       buttonText = "Pause";
+      setPlayError(false);
     }
 
     e.currentTarget.textContent = buttonText;
-    setTimerWork(!timerWork);
   };
 
   const handleClickCell = (e: BaseSyntheticEvent) => {
-    const classes = e.target.classList;
-    const classOpen = "table__cell--open";
-    const classFlag = "table__cell--flag";
-    const coordinats = e.currentTarget.dataset.cell.split("-");
-    console.log("e.target", coordinats);
+    if (play) {
+      const classes = e.target.classList;
+      const classOpen = "table__cell--open";
+      const classFlag = "table__cell--flag";
+      const coordinats = e.currentTarget.dataset.cell.split("-");
 
-    if (e.type === "click") {
-      if (!classes.contains(classOpen) && !classes.contains(classFlag)) {
-        classes.add(classOpen);
-        dispatch(
-          actions.GAME.UPDATED_CELL_OPEN({
-            row: coordinats[0],
-            col: coordinats[1],
-          })
-        );
-      }
-    } else if (e.type === "contextmenu") {
-      e.preventDefault();
-      if (!classes.contains(classOpen)) {
-        if (flags > 0) {
+      if (e.type === "click") {
+        if (!classes.contains(classOpen) && !classes.contains(classFlag)) {
+          classes.add(classOpen);
+          dispatch(
+            actions.GAME.UPDATED_CELL_OPEN({
+              row: coordinats[0],
+              col: coordinats[1],
+            })
+          );
+        }
+      } else if (e.type === "contextmenu") {
+        e.preventDefault();
+        if (!classes.contains(classOpen)) {
           let flagsCount = flags;
           if (!classes.contains(classFlag)) {
             classes.add(classFlag);
@@ -84,6 +84,8 @@ const Board: React.FC = () => {
           dispatch(actions.GAME.UPDATED_MINES(flagsCount));
         }
       }
+    } else {
+      setPlayError(true);
     }
   };
 
@@ -94,19 +96,19 @@ const Board: React.FC = () => {
         <>
           <div className="board__panel">
             <div className="board__panel-column">
-              <span className="board__panel-label">Поле:</span>
+              <span className="board__panel-label">Board:</span>
               <span className="board__panel-value">
                 {rows}x{cols}
               </span>
             </div>
             <div className="board__panel-column">
-              <span className="board__panel-label">Мины:</span>
+              <span className="board__panel-label">Mines:</span>
               <span className="board__panel-value">{flags}</span>
             </div>
             <div className="board__panel-column">
-              <span className="board__panel-label">Время:</span>
+              <span className="board__panel-label">Time:</span>
               <span className="board__panel-value">
-                <Timer timerWork={timerWork} times={times} />
+                <Timer play={play} times={times} />
               </span>
             </div>
           </div>
@@ -116,8 +118,13 @@ const Board: React.FC = () => {
               onClick={handleTimerPause}
               className="board__btn-pause"
             >
-              Pause
+              Play
             </button>
+            {playError ? (
+              <span className="board__text-error">
+                If you want to continue game press Play.
+              </span>
+            ) : null}
           </div>
           <div id="table" className="board__table">
             <GenerateBoard board={board} handleClickCell={handleClickCell} />

@@ -35,6 +35,8 @@ export const GenerateBoard: React.FC<MyProps> = ({
                   "table__cell--n": objCell.number && objCell.number !== "0",
                   [`table__cell--n-${objCell.number}`]:
                     objCell.number && objCell.number !== "0",
+                  "table__cell--open": objCell.opened,
+                  "table__cell--flag": objCell.flag,
                 });
                 return (
                   <div

@@ -16,11 +16,12 @@ const Welcome: React.FC = () => {
   const dispatch = useDispatch();
 
   const handleSubmit = (data: FormDataType) => {
-    const game = generateGame(data);
+    const { game, mines } = generateGame(data);
     dispatch(
       actions.GAME.REQUESTED({
         settings: data,
-        game: { board: game, flags: data.mines, times: 0 },
+        game: { board: game, flags: data.mines, times: 0, play: false },
+        mines,
       })
     );
   };
