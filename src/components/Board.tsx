@@ -5,7 +5,7 @@ import { push } from "connected-react-router";
 import { isEmpty } from "lodash";
 import useSound from "use-sound";
 
-import { GenerateBoard } from "utils";
+import { GenerateBoard, checkWinner } from "utils";
 import { getGame } from "components/store/selectors";
 import { actions } from "store/actions";
 import { ROUTES_PATH } from "router/constants";
@@ -22,7 +22,7 @@ import "styles/index.scss";
 
 const Board: React.FC = () => {
   const dispatch = useDispatch();
-  const { settings, game } = useSelector(getGame());
+  const { settings, game, mines } = useSelector(getGame());
   const { rows, cols } = settings;
   const { board, flags, times, play } = game;
   const [playError, setPlayError] = useState(false);
@@ -78,12 +78,23 @@ const Board: React.FC = () => {
           } else {
             soundMine();
           }
+
           dispatch(
             actions.GAME.UPDATED_CELL_OPEN({
               row: coordinats[0],
               col: coordinats[1],
             })
           );
+
+          const checkWin = checkWinner(board, mines);
+          console.log("checkWin", checkWin);
+
+          setTimeout(() => {
+            //if (checkWin || classes.contains(classMine)) {
+            if (checkWin) {
+              dispatch(push(ROUTES_PATH.RESULT));
+            }
+          }, 1000);
         }
       } else if (e.type === "contextmenu") {
         e.preventDefault();
