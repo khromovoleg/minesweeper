@@ -87,14 +87,12 @@ const Board: React.FC = () => {
           );
 
           const checkWin = checkWinner(board, mines);
-          console.log("checkWin", checkWin);
 
           setTimeout(() => {
-            //if (checkWin || classes.contains(classMine)) {
-            if (checkWin) {
+            if (checkWin || classes.contains(classMine)) {
               dispatch(push(ROUTES_PATH.RESULT));
             }
-          }, 1000);
+          }, 2000);
         }
       } else if (e.type === "contextmenu") {
         e.preventDefault();
