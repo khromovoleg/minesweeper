@@ -6,3 +6,5 @@ export const getGame = () => createSelector(gameState, (state) => state);
 
 export const getSettings = () =>
   createSelector(gameState, (state) => state.settings);
+
+export const getWin = () => createSelector(gameState, (state) => state.win);

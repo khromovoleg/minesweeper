@@ -38,7 +38,7 @@ const UpdateMines = ({ payload, callback }: any) =>
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
-        yield put(push(ROUTES_PATH.GAME));
+        //yield put(push(ROUTES_PATH.GAME));
       },
     actions.GAME.FAILED,
     callback
@@ -55,7 +55,7 @@ const UpdateTimes = ({ payload, callback }: any) =>
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
-        yield put(push(ROUTES_PATH.GAME));
+        //yield put(push(ROUTES_PATH.GAME));
       },
     actions.GAME.FAILED,
     callback
@@ -73,7 +73,7 @@ const UpdateCellOpen = ({ payload, callback }: any) =>
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
-        yield put(push(ROUTES_PATH.GAME));
+        //yield put(push(ROUTES_PATH.GAME));
       },
     actions.GAME.FAILED,
     callback
@@ -92,7 +92,7 @@ const UpdateCellFlag = ({ payload, callback }: any) =>
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
-        yield put(push(ROUTES_PATH.GAME));
+        //yield put(push(ROUTES_PATH.GAME));
       },
     actions.GAME.FAILED,
     callback
@@ -109,7 +109,22 @@ const UpdateTimerAction = ({ payload, callback }: any) =>
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
-        yield put(push(ROUTES_PATH.GAME));
+        //yield put(push(ROUTES_PATH.GAME));
+      },
+    actions.GAME.FAILED,
+    callback
+  );
+
+const ResultGame = ({ payload, callback }: any) =>
+  sagaAssessor(
+    () =>
+      function* () {
+        yield put(actions.GAME.CLEARED(payload));
+        (localStorage as any).setItem(
+          "minesweeper",
+          JSON.stringify({ win: payload })
+        );
+        yield put(push(ROUTES_PATH.RESULT));
       },
     actions.GAME.FAILED,
     callback
@@ -122,4 +137,5 @@ export default function* gameWatcher() {
   yield takeLatest(constants.GAME.UPDATED_CELL_OPEN, UpdateCellOpen);
   yield takeLatest(constants.GAME.UPDATED_CELL_FLAG, UpdateCellFlag);
   yield takeLatest(constants.GAME.UPDATED_TIMER_ACTION, UpdateTimerAction);
+  yield takeLatest(constants.GAME.RESULT, ResultGame);
 }

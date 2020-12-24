@@ -15,6 +15,7 @@ export const initialState = {
       play: false,
     },
     mines: {},
+    win: null,
     loading: false,
     error: null,
   },

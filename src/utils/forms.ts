@@ -1,8 +1,8 @@
 import * as Yup from "yup";
 
-const moreSize = 5;
+const moreSize = 1;
 const lessSize = 30;
-const moreMines = 5;
+const moreMines = 1;
 const lessMines = 30 * 10;
 
 export const FORMS = {

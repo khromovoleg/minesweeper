@@ -10,6 +10,7 @@ const types: Array<string> = [
   "UPDATED_CELL_OPEN",
   "UPDATED_CELL_FLAG",
   "UPDATED_TIMER_ACTION",
+  "RESULT",
 ];
 
 interface Result {

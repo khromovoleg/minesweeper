@@ -26,6 +26,7 @@ const Board: React.FC = () => {
   const { rows, cols } = settings;
   const { board, flags, times, play } = game;
   const [playError, setPlayError] = useState(false);
+  const [textButton, setTextButton] = useState("Play");
 
   const [soundFlag] = useSound(soundFlagFile);
   const [soundMine] = useSound(soundMineFile);
@@ -37,6 +38,7 @@ const Board: React.FC = () => {
     const minesweeper = JSON.parse(
       (localStorage as any).getItem("minesweeper")
     );
+
     if (!isEmpty(minesweeper)) {
       dispatch(
         actions.GAME.REQUESTED({
@@ -48,18 +50,19 @@ const Board: React.FC = () => {
     }
   }
 
-  const handleTimerPause = (e: BaseSyntheticEvent) => {
-    let buttonText = "Play";
+  const changeTextButton = () => {
     dispatch(actions.GAME.UPDATED_TIMER_ACTION(play));
 
     if (!play) {
-      buttonText = "Pause";
+      setTextButton("Pause");
       setPlayError(false);
     }
 
     soundBtnClick();
+  };
 
-    e.currentTarget.textContent = buttonText;
+  const handleTimerPause = () => {
+    changeTextButton();
   };
 
   const handleClickCell = (e: BaseSyntheticEvent) => {
@@ -88,9 +91,17 @@ const Board: React.FC = () => {
 
           const checkWin = checkWinner(board, mines);
 
+          if (checkWin || classes.contains(classMine)) {
+            changeTextButton();
+          }
+
           setTimeout(() => {
-            if (checkWin || classes.contains(classMine)) {
-              dispatch(push(ROUTES_PATH.RESULT));
+            if (checkWin) {
+              dispatch(actions.GAME.RESULT(true));
+            }
+
+            if (classes.contains(classMine)) {
+              dispatch(actions.GAME.RESULT(false));
             }
           }, 2000);
         }
@@ -150,7 +161,7 @@ const Board: React.FC = () => {
               onClick={handleTimerPause}
               className="board__btn-pause"
             >
-              Play
+              {textButton}
             </button>
             {playError ? (
               <span className="board__text-error">
@@ -167,6 +178,7 @@ const Board: React.FC = () => {
           <h3>Set Board Sizes.</h3>
           <button
             type="button"
+            className="btn board__btn"
             onClick={() => dispatch(push(ROUTES_PATH.WELCOME))}
           >
             Back to Settings

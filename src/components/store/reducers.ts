@@ -1,6 +1,8 @@
 import { constants, initialState } from "store/constants";
 
 export default (state = initialState.game, action: any) => {
+  console.log("state", state);
+  console.log("action", action);
   switch (action.type) {
     case constants.GAME.REQUESTED:
       return {
@@ -25,7 +27,8 @@ export default (state = initialState.game, action: any) => {
       };
     case constants.GAME.CLEARED:
       return {
-        ...initialState.game,
+        ...state,
+        win: action.payload,
         loading: false,
       };
 
