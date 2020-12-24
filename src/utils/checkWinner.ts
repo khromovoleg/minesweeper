@@ -1,4 +1,4 @@
-export const checkWinner = (board: any, mines: any) => {
+export const checkWinner = (board: any) => {
   const rows = board.length;
   const cols = board[0].length;
   let result = true;

@@ -1,6 +1,7 @@
 import { put, takeLatest, select } from "redux-saga/effects";
 
 import { push } from "connected-react-router";
+import { isEmpty } from "lodash";
 
 import { constants } from "store/constants";
 import { ROUTES_PATH } from "router/constants";
@@ -17,7 +18,7 @@ const SetGame = ({ payload, callback }: any) =>
           "minesweeper",
           JSON.stringify({
             settings: payload.settings,
-            game: payload.game,
+            history: payload.history,
             mines: payload.mines,
           })
         );
@@ -27,22 +28,25 @@ const SetGame = ({ payload, callback }: any) =>
     callback
   );
 
-const UpdateMines = ({ payload, callback }: any) =>
-  sagaAssessor(
-    () =>
-      function* () {
-        const game = yield select(getGame());
-        //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
-        if (game["game"]) {
-          game["game"]["flags"] = payload;
-          yield put(actions.GAME.SUCCEEDED(game));
-          (localStorage as any).setItem("minesweeper", JSON.stringify(game));
-        }
-        //yield put(push(ROUTES_PATH.GAME));
-      },
-    actions.GAME.FAILED,
-    callback
-  );
+// const UpdateMines = ({ payload, callback }: any) =>
+//   sagaAssessor(
+//     () =>
+//       function* () {
+//         const game = yield select(getGame());
+//         //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
+//         if (!isEmpty(game)) {
+//           const lastStep = game["history"][game["history"].length - 1];
+//           const newStep = JSON.parse(JSON.stringify(lastStep));
+//           newStep["game"]["flags"] = payload;
+//           game["history"] = game["history"].concat([{ ...newStep }]);
+//           yield put(actions.GAME.SUCCEEDED(game));
+//           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
+//         }
+//         //yield put(push(ROUTES_PATH.GAME));
+//       },
+//     actions.GAME.FAILED,
+//     callback
+//   );
 
 const UpdateTimes = ({ payload, callback }: any) =>
   sagaAssessor(
@@ -50,8 +54,10 @@ const UpdateTimes = ({ payload, callback }: any) =>
       function* () {
         const game = yield select(getGame());
         //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
-        if (game["game"]) {
-          game["game"]["times"] = payload;
+        if (!isEmpty(game)) {
+          game["history"][game["history"].length - 1]["game"][
+            "times"
+          ] = payload;
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
@@ -68,8 +74,14 @@ const UpdateCellOpen = ({ payload, callback }: any) =>
         const { row, col } = payload;
         const game = yield select(getGame());
         //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
-        if (game["game"]) {
-          game["game"]["board"][row][col].opened = true;
+        if (!isEmpty(game)) {
+          // game["history"][game["history"].length - 1]["game"]["board"][row][
+          //   col
+          // ].opened = true;
+          const lastStep = game["history"][game["history"].length - 1];
+          const newStep = JSON.parse(JSON.stringify(lastStep));
+          newStep["game"]["board"][row][col].opened = true;
+          game["history"] = game["history"].concat([{ ...newStep }]);
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
@@ -83,12 +95,26 @@ const UpdateCellFlag = ({ payload, callback }: any) =>
   sagaAssessor(
     () =>
       function* () {
-        const { row, col } = payload;
+        const {
+          cell: { row, col },
+          flagsCount,
+        } = payload;
         const game = yield select(getGame());
         //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
-        if (game["game"]) {
-          const flag = game["game"]["board"][row][col].flag;
-          game["game"]["board"][row][col].flag = !flag;
+        if (!isEmpty(game)) {
+          // const flag =
+          //   game["history"][game["history"].length - 1]["game"]["board"][row][
+          //     col
+          //   ].flag;
+          // game["history"][game["history"].length - 1]["game"]["board"][row][
+          //   col
+          // ].flag = !flag;
+          const lastStep = game["history"][game["history"].length - 1];
+          const newStep = JSON.parse(JSON.stringify(lastStep));
+          const flag = newStep["game"]["board"][row][col].flag;
+          newStep["game"]["board"][row][col].flag = !flag;
+          newStep["game"]["flags"] = flagsCount;
+          game["history"] = game["history"].concat([{ ...newStep }]);
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
@@ -104,8 +130,10 @@ const UpdateTimerAction = ({ payload, callback }: any) =>
       function* () {
         const game = yield select(getGame());
         //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
-        if (game["game"]) {
-          game["game"]["play"] = !payload;
+        if (!isEmpty(game)) {
+          game["history"][game["history"].length - 1]["game"][
+            "play"
+          ] = !payload;
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
@@ -132,7 +160,7 @@ const ResultGame = ({ payload, callback }: any) =>
 
 export default function* gameWatcher() {
   yield takeLatest(constants.GAME.REQUESTED, SetGame);
-  yield takeLatest(constants.GAME.UPDATED_MINES, UpdateMines);
+  //yield takeLatest(constants.GAME.UPDATED_MINES, UpdateMines);
   yield takeLatest(constants.GAME.UPDATED_TIMES, UpdateTimes);
   yield takeLatest(constants.GAME.UPDATED_CELL_OPEN, UpdateCellOpen);
   yield takeLatest(constants.GAME.UPDATED_CELL_FLAG, UpdateCellFlag);

@@ -22,11 +22,14 @@ import "styles/index.scss";
 
 const Board: React.FC = () => {
   const dispatch = useDispatch();
-  const { settings, game, mines } = useSelector(getGame());
+  const { settings, history } = useSelector(getGame());
   const { rows, cols } = settings;
-  const { board, flags, times, play } = game;
+  const currentHistory = history[history.length - 1];
+  const {
+    game: { board, flags, times, play },
+  } = currentHistory;
   const [playError, setPlayError] = useState(false);
-  const [textButton, setTextButton] = useState("Play");
+  let textButton = play ? "Pause" : "Play";
 
   const [soundFlag] = useSound(soundFlagFile);
   const [soundMine] = useSound(soundMineFile);
@@ -43,7 +46,7 @@ const Board: React.FC = () => {
       dispatch(
         actions.GAME.REQUESTED({
           settings: minesweeper.settings,
-          game: minesweeper.game,
+          history: minesweeper.history,
           mines: minesweeper.mines,
         })
       );
@@ -54,7 +57,7 @@ const Board: React.FC = () => {
     dispatch(actions.GAME.UPDATED_TIMER_ACTION(play));
 
     if (!play) {
-      setTextButton("Pause");
+      textButton = "Play";
       setPlayError(false);
     }
 
@@ -89,7 +92,7 @@ const Board: React.FC = () => {
             })
           );
 
-          const checkWin = checkWinner(board, mines);
+          const checkWin = checkWinner(board);
 
           if (checkWin || classes.contains(classMine)) {
             changeTextButton();
@@ -119,14 +122,18 @@ const Board: React.FC = () => {
           }
           dispatch(
             actions.GAME.UPDATED_CELL_FLAG({
-              row: coordinats[0],
-              col: coordinats[1],
+              cell: {
+                row: coordinats[0],
+                col: coordinats[1],
+              },
+              flagsCount,
             })
           );
-          dispatch(actions.GAME.UPDATED_MINES(flagsCount));
+          //dispatch(actions.GAME.UPDATED_MINES(flagsCount));
         }
       }
     } else {
+      e.preventDefault();
       soundError();
       setPlayError(true);
     }

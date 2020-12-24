@@ -8,12 +8,16 @@ export const constants = actionConstantsCreator(compose);
 export const initialState = {
   game: {
     settings: {},
-    game: {
-      flags: null,
-      times: 0,
-      board: {},
-      play: false,
-    },
+    history: [
+      {
+        game: {
+          flags: null,
+          times: 0,
+          board: {},
+          play: false,
+        },
+      },
+    ],
     mines: {},
     win: null,
     loading: false,
