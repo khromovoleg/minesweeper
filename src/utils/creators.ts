@@ -5,12 +5,13 @@ const types: Array<string> = [
   "SUCCEEDED",
   "FAILED",
   "CLEARED",
-  "UPDATED_MINES",
+  //"UPDATED_MINES",
   "UPDATED_TIMES",
   "UPDATED_CELL_OPEN",
   "UPDATED_CELL_FLAG",
   "UPDATED_TIMER_ACTION",
   "RESULT",
+  "UPDATED_STEP",
 ];
 
 interface Result {

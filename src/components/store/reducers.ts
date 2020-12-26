@@ -14,6 +14,7 @@ export default (state = initialState.game, action: any) => {
         settings: action.payload.settings,
         history: action.payload.history,
         mines: action.payload.mines,
+        step: action.payload.step,
         loading: false,
         error: null,
       };
@@ -22,6 +23,12 @@ export default (state = initialState.game, action: any) => {
         ...state,
         loading: false,
         error: action.payload.error,
+      };
+    case constants.GAME.UPDATE_STEP:
+      return {
+        ...state,
+        step: action.payload,
+        loading: false,
       };
     case constants.GAME.CLEARED:
       return {

@@ -26,6 +26,7 @@ const Welcome: React.FC = () => {
           },
         ],
         mines,
+        step: 0,
       })
     );
   };

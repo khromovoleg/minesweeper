@@ -20,6 +20,7 @@ const SetGame = ({ payload, callback }: any) =>
             settings: payload.settings,
             history: payload.history,
             mines: payload.mines,
+            step: payload.step,
           })
         );
         yield put(push(ROUTES_PATH.GAME));
@@ -78,10 +79,15 @@ const UpdateCellOpen = ({ payload, callback }: any) =>
           // game["history"][game["history"].length - 1]["game"]["board"][row][
           //   col
           // ].opened = true;
-          const lastStep = game["history"][game["history"].length - 1];
+          const history = game["history"].slice(0, game["step"] + 1);
+          console.log("history", history);
+          const lastStep = history[history.length - 1];
+          //lastStep["game"]["play"] = false;
           const newStep = JSON.parse(JSON.stringify(lastStep));
           newStep["game"]["board"][row][col].opened = true;
-          game["history"] = game["history"].concat([{ ...newStep }]);
+          //newStep["game"]["play"] = true;
+          game["history"] = history.concat([{ ...newStep }]);
+          game["step"] = game["step"] + 1;
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
@@ -109,12 +115,17 @@ const UpdateCellFlag = ({ payload, callback }: any) =>
           // game["history"][game["history"].length - 1]["game"]["board"][row][
           //   col
           // ].flag = !flag;
-          const lastStep = game["history"][game["history"].length - 1];
+          const history = game["history"].slice(0, game["step"] + 1);
+          console.log("history", history);
+          const lastStep = history[history.length - 1];
+          //lastStep["game"]["play"] = false;
           const newStep = JSON.parse(JSON.stringify(lastStep));
           const flag = newStep["game"]["board"][row][col].flag;
           newStep["game"]["board"][row][col].flag = !flag;
           newStep["game"]["flags"] = flagsCount;
-          game["history"] = game["history"].concat([{ ...newStep }]);
+          //newStep["game"]["play"] = true;
+          game["history"] = history.concat([{ ...newStep }]);
+          game["step"] = game["step"] + 1;
           yield put(actions.GAME.SUCCEEDED(game));
           (localStorage as any).setItem("minesweeper", JSON.stringify(game));
         }
@@ -158,6 +169,26 @@ const ResultGame = ({ payload, callback }: any) =>
     callback
   );
 
+const UpdateStep = ({ payload, callback }: any) =>
+  sagaAssessor(
+    () =>
+      function* () {
+        const game = yield select(getGame());
+        if (!isEmpty(game)) {
+          game["step"] = payload;
+          yield put(actions.GAME.UPDATE_STEP(payload));
+          (localStorage as any).setItem("minesweeper", JSON.stringify(game));
+        }
+        // (localStorage as any).setItem(
+        //   "minesweeper",
+        //   JSON.stringify({ step: payload })
+        // );
+        //yield put(push(ROUTES_PATH.GAME));
+      },
+    actions.GAME.FAILED,
+    callback
+  );
+
 export default function* gameWatcher() {
   yield takeLatest(constants.GAME.REQUESTED, SetGame);
   //yield takeLatest(constants.GAME.UPDATED_MINES, UpdateMines);
@@ -166,4 +197,5 @@ export default function* gameWatcher() {
   yield takeLatest(constants.GAME.UPDATED_CELL_FLAG, UpdateCellFlag);
   yield takeLatest(constants.GAME.UPDATED_TIMER_ACTION, UpdateTimerAction);
   yield takeLatest(constants.GAME.RESULT, ResultGame);
+  yield takeLatest(constants.GAME.UPDATED_STEP, UpdateStep);
 }

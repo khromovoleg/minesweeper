@@ -18,6 +18,7 @@ export const initialState = {
         },
       },
     ],
+    step: 0,
     mines: {},
     win: null,
     loading: false,

@@ -22,9 +22,18 @@ import "styles/index.scss";
 
 const Board: React.FC = () => {
   const dispatch = useDispatch();
-  const { settings, history } = useSelector(getGame());
+  const { settings, history, step } = useSelector(getGame());
   const { rows, cols } = settings;
-  const currentHistory = history[history.length - 1];
+  //const [step, setStep] = useState(history.length - 1);
+  //const step = history.length - 1;
+  //console.log("step", step);
+  const currentHistory = history[step];
+  //console.log("currentHistory", currentHistory);
+  const prev = history[step - 1] ? step - 1 : null;
+  const next = history[step + 1] ? step + 1 : null;
+
+  // console.log("prev", prev);
+  // console.log("next", next);
   const {
     game: { board, flags, times, play },
   } = currentHistory;
@@ -48,6 +57,7 @@ const Board: React.FC = () => {
           settings: minesweeper.settings,
           history: minesweeper.history,
           mines: minesweeper.mines,
+          step: minesweeper.step,
         })
       );
     }
@@ -132,10 +142,24 @@ const Board: React.FC = () => {
           //dispatch(actions.GAME.UPDATED_MINES(flagsCount));
         }
       }
+
+      //console.log("!!!!!!!!!!!!!!!!!!!11111", next);
+      if (next !== null) {
+        //console.log("!!!!!!!!!!!!!!!!!!!2222", next);
+        //setStep(next);
+        handleNavClick(next);
+      }
     } else {
       e.preventDefault();
       soundError();
       setPlayError(true);
+    }
+  };
+
+  const handleNavClick = (step: number | null): void => {
+    if (step !== null) {
+      dispatch(actions.GAME.UPDATED_STEP(step));
+      //setStep(step);
     }
   };
 
@@ -178,6 +202,25 @@ const Board: React.FC = () => {
           </div>
           <div id="table" className="board__table">
             <GenerateBoard board={board} handleClickCell={handleClickCell} />
+          </div>
+          <div className="board__nav">
+            <button
+              type="button"
+              onClick={() => handleNavClick(prev)}
+              disabled={prev !== null ? false : true}
+              title="asdf"
+            >
+              Prev
+            </button>
+            <button
+              type="button"
+              onClick={() => handleNavClick(next)}
+              disabled={next !== null ? false : true}
+              title={next !== null ? next : ""}
+            >
+              Next
+            </button>
+            <div>{step}</div>
           </div>
         </>
       ) : (
