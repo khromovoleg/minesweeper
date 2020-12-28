@@ -108,6 +108,8 @@ const Board: React.FC = () => {
             changeTextButton();
           }
 
+          console.log("checkWin", checkWin);
+
           setTimeout(() => {
             if (checkWin) {
               dispatch(actions.GAME.RESULT(true));

@@ -1,19 +1,34 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
+import useSound from "use-sound";
 
 import { getWin } from "components/store/selectors";
 import { ROUTES_PATH } from "router/constants";
+
+import soundWinFile from "sounds/soundWin.wav";
+import soundLoseFile from "sounds/soundLose.wav";
 
 const Result: React.FC = () => {
   const dispatch = useDispatch();
   const win = useSelector(getWin());
 
+  const [soundWin] = useSound(soundWinFile);
+  const [soundLose] = useSound(soundLoseFile);
+
   if (win === null) {
     (localStorage as any).removeItem("minesweeper");
     dispatch(push(ROUTES_PATH.WELCOME));
   }
+
+  useEffect(() => {
+    if (win) {
+      soundWin();
+    } else {
+      soundLose();
+    }
+  }, [win]);
 
   return (
     <div className="result">
