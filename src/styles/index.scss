@@ -1,5 +1,4 @@
 @import "./variables.scss";
-@import "./mixins.scss";
 
 html,
 body,
@@ -18,6 +17,7 @@ body {
   font-size: 14px;
   line-height: 20px;
   min-width: 320px;
+  background: #f5f9ff;
 }
 
 .app {
@@ -27,21 +27,71 @@ body {
   min-height: 100%;
   width: 100%;
   margin: 0 auto;
+  position: relative;
 }
 
 .container {
   width: 100%;
   max-width: 800px;
-  margin: 0 20px 100px;
+  margin: 120px 20px 100px;
 }
 
 .title {
   text-align: center;
+  margin: 0 0 40px;
+  font-size: 36px;
+  line-height: 1;
+}
+
+.btn {
+  background: $green;
+  border-radius: $border-radius;
+  border: 0;
+  width: 100%;
+  padding: 8px 12px;
+  line-height: 25px;
+  font-size: 14px;
+  font-weight: 500;
+  color: $white;
+  cursor: pointer;
+  transition: $transition;
+
+  &:hover,
+  &:focus {
+    background: $green-dark;
+    border: 0;
+    outline: none;
+  }
+}
+
+.logo {
+  position: absolute;
+  left: 50%;
+  top: 30px;
+  transform: translate(-50%, 0);
+  display: flex;
+  align-items: flex-end;
+
+  &__icon {
+    transform: rotate(-45deg);
+    height: 60px;
+  }
+
+  &__text {
+    font-size: 22px;
+    line-height: 26px;
+    font-weight: 700;
+    color: #2cc0af;
+    margin: 0 0 -5px;
+  }
 }
 
 .welcome {
   &__description {
     text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 0 20px;
   }
 
   &__form {
@@ -64,37 +114,52 @@ body {
 
   &__row {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
     width: 100%;
-    margin: 0 0 20px;
+    max-width: 330px;
+    margin: 0 auto 20px;
 
     &--btn {
-      justify-content: center;
+      align-items: center;
     }
   }
 
   &__label {
-    width: 20%;
     flex-shrink: 0;
-    margin: 0 20px 0 0;
-    text-align: right;
+    margin: 0 0 5px;
+    font-size: 12px;
+    color: $gray;
   }
 
   &__input,
   &__select {
+    background: $white;
     flex: 1;
-    max-width: 330px;
+    padding: 8px 12px;
+    border: 1px solid $gray-light;
+    border-radius: $border-radius;
+    color: $gray;
+    line-height: 25px;
+    font-size: 14px;
+    font-weight: 500;
+    transition: $transition;
+
+    &:focus {
+      outline: none;
+      border-color: $green-dark;
+    }
   }
 
   &__error {
     display: flex;
     width: 100%;
     font-size: 12px;
-    color: red;
+    line-height: 16px;
+    color: $red;
+    margin: 5px 0 0;
   }
 
   &__btn {
-    width: 100%;
     max-width: 150px;
   }
 }
@@ -103,6 +168,7 @@ body {
   &__table {
     display: flex;
     justify-content: center;
+    margin: 0 0 30px;
   }
 
   &__panel {
@@ -112,10 +178,17 @@ body {
 
   &__panel-column {
     display: flex;
-    margin: 0 40px 0 0;
+    margin: 0 35px 0 0;
 
     &:last-child {
       margin: 0 0 0 auto;
+    }
+
+    &--time {
+      .board__panel-value {
+        min-width: 47px;
+        text-align: right;
+      }
     }
   }
 
@@ -127,26 +200,62 @@ body {
     font-weight: 500;
   }
 
-  &__btn-pause-wrap {
+  &__btn-wrap {
     display: flex;
     align-items: flex-end;
     flex-direction: column;
-    margin: 0 0 30px;
-  }
-
-  &__btn-pause {
-    min-width: 100px;
+    margin: 0 0 20px;
   }
 
   &__text-error {
     margin: 10px 0 0;
+    color: $red;
+  }
+
+  &__nav {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__btn {
+    background: $gray-medium;
+    max-width: 120px;
+    margin: 0 10px;
+
+    &:disabled {
+      background: $gray-light;
+      cursor: default;
+
+      &:hover,
+      &:focus {
+        background: $gray-light;
+      }
+    }
+
+    &:hover,
+    &:focus {
+      background: $gray;
+    }
+
+    &--pause {
+      min-width: 90px;
+      max-width: none;
+      width: auto;
+      background: $green;
+      margin: 0;
+      padding: 3px 6px;
+
+      &:hover,
+      &:focus {
+        background: $green-dark;
+      }
+    }
   }
 }
 
 .table {
   display: flex;
   flex-direction: column;
-  //width: 100%;
 
   &__row {
     display: flex;
@@ -154,36 +263,36 @@ body {
 
     &:nth-child(even) {
       .table__cell {
-        background: #aad751;
+        background: $green;
 
         &:nth-child(even) {
-          background: #a2d149;
+          background: $green-dark;
 
           &.table__cell--open {
-            background: #d7b899;
+            background: $brown;
           }
         }
 
         &.table__cell--open {
-          background: #e5c29f;
+          background: $brown-dark;
         }
       }
     }
 
     &:nth-child(odd) {
       .table__cell {
-        background: #a2d149;
+        background: $green-dark;
 
         &:nth-child(even) {
-          background: #aad751;
+          background: $green;
 
           &.table__cell--open {
-            background: #e5c29f;
+            background: $brown-dark;
           }
         }
 
         &.table__cell--open {
-          background: #d7b899;
+          background: $brown;
         }
       }
     }
@@ -202,7 +311,7 @@ body {
     transition: all 0.1s ease-out;
 
     &:hover:not(.table__cell--open) {
-      background: #bce077 !important;
+      background: $green-light !important;
     }
 
     &--flag:before {
@@ -233,7 +342,7 @@ body {
       }
 
       &.table__cell--n:before {
-        color: white;
+        color: $white;
         font-size: 22px;
         font-weight: 500;
       }
@@ -265,22 +374,27 @@ body {
 
       &.table__cell--n-6:before {
         content: "6";
+        color: #fafe09;
       }
 
       &.table__cell--n-7:before {
         content: "7";
+        color: #09fedd;
       }
 
       &.table__cell--n-8:before {
         content: "8";
+        color: #fe09d5;
       }
 
       &.table__cell--n-9:before {
         content: "9";
+        color: #9009fe;
       }
 
       &.table__cell--n-10:before {
         content: "10";
+        color: #0716ea;
       }
     }
   }
@@ -295,6 +409,11 @@ body {
     width: 80px;
     height: 80px;
     margin: 0 0 30px;
+  }
+
+  &__btn-wrap {
+    display: flex;
+    justify-content: center;
   }
 
   &__btn {

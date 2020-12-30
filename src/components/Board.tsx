@@ -167,7 +167,7 @@ const Board: React.FC = () => {
 
   return (
     <div className="board">
-      <h1 className="title">Board</h1>
+      <h1 className="title">Game</h1>
       {!isEmpty(settings) ? (
         <>
           <div className="board__panel">
@@ -181,18 +181,18 @@ const Board: React.FC = () => {
               <span className="board__panel-label">Mines:</span>
               <span className="board__panel-value">{flags}</span>
             </div>
-            <div className="board__panel-column">
+            <div className="board__panel-column board__panel-column--time">
               <span className="board__panel-label">Time:</span>
               <span className="board__panel-value">
                 <Timer play={play} times={times} />
               </span>
             </div>
           </div>
-          <div className="board__btn-pause-wrap">
+          <div className="board__btn-wrap">
             <button
               type="button"
               onClick={handleTimerPause}
-              className="board__btn-pause"
+              className="btn board__btn board__btn--pause"
             >
               {textButton}
             </button>
@@ -208,33 +208,37 @@ const Board: React.FC = () => {
           <div className="board__nav">
             <button
               type="button"
+              className="btn board__btn"
               onClick={() => handleNavClick(prev)}
               disabled={prev !== null ? false : true}
-              title="asdf"
+              //title={prev !== null ? prev : ""}
             >
               Prev
             </button>
             <button
               type="button"
+              className="btn board__btn"
               onClick={() => handleNavClick(next)}
               disabled={next !== null ? false : true}
               title={next !== null ? next : ""}
             >
               Next
             </button>
-            <div>{step}</div>
+            {/* <div>{step}</div> */}
           </div>
         </>
       ) : (
         <div>
           <h3>Set Board Sizes.</h3>
-          <button
-            type="button"
-            className="btn board__btn"
-            onClick={() => dispatch(push(ROUTES_PATH.WELCOME))}
-          >
-            Back to Settings
-          </button>
+          <div className="board__nav">
+            <button
+              type="button"
+              className="btn"
+              onClick={() => dispatch(push(ROUTES_PATH.WELCOME))}
+            >
+              Back to Settings
+            </button>
+          </div>
         </div>
       )}
     </div>

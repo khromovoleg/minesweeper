@@ -17,6 +17,14 @@ interface RouteType {
 const App: React.FC = () => {
   return (
     <div className="app">
+      <div className="logo">
+        <img
+          className="logo__icon"
+          src="assets/icons/main.svg"
+          alt="Logo MineSweeper"
+        />
+        <span className="logo__text">MineSweeper</span>
+      </div>
       <div className="container">
         <Switch>
           {publicRouter.map((route: RouteType) => routeAssessor(route))}

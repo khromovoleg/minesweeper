@@ -38,13 +38,15 @@ const Result: React.FC = () => {
       <h3 className="title">
         {win ? "Congratulation! You are winner!" : "You are lose! Try again!"}
       </h3>
-      <button
-        type="button"
-        className="btn result__btn"
-        onClick={() => dispatch(push(ROUTES_PATH.WELCOME))}
-      >
-        Start new game
-      </button>
+      <div className="result__btn-wrap">
+        <button
+          type="button"
+          className="btn"
+          onClick={() => dispatch(push(ROUTES_PATH.WELCOME))}
+        >
+          Start new game
+        </button>
+      </div>
     </div>
   );
 };
