@@ -17,18 +17,20 @@ const Result: React.FC = () => {
   const [soundWin] = useSound(soundWinFile);
   const [soundLose] = useSound(soundLoseFile);
 
+  console.log("win", win);
+
   if (win === null) {
     (localStorage as any).removeItem("minesweeper");
     dispatch(push(ROUTES_PATH.WELCOME));
   }
 
-  useEffect(() => {
-    if (win) {
-      soundWin();
-    } else {
-      soundLose();
-    }
-  }, [win]);
+  // useEffect(() => {
+  //   if (win) {
+  //     soundWin();
+  //   } else {
+  //     soundLose();
+  //   }
+  // }, [win]);
 
   return (
     <div className="result">

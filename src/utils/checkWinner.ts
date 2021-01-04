@@ -1,5 +1,5 @@
 export const checkWinner = (board: any) => {
-  console.log("board", board);
+  //console.log("board", board);
   const rows = board.length;
   const cols = board[0].length;
   let result = true;

@@ -72,7 +72,7 @@ const UpdateCellOpen = ({ payload, callback }: any) =>
   sagaAssessor(
     () =>
       function* () {
-        const { row, col } = payload;
+        //const { row, col } = payload;
         const game = yield select(getGame());
         //const game = JSON.parse((localStorage as any).getItem("minesweeper"));
         if (!isEmpty(game)) {
@@ -84,7 +84,10 @@ const UpdateCellOpen = ({ payload, callback }: any) =>
           const lastStep = history[history.length - 1];
           //lastStep["game"]["play"] = false;
           const newStep = JSON.parse(JSON.stringify(lastStep));
-          newStep["game"]["board"][row][col].opened = true;
+          //newStep["game"]["board"][row][col].opened = true;
+          console.log("lastStep", newStep["game"]["board"]);
+          console.log("payload", payload);
+          newStep["game"]["board"] = payload;
           //newStep["game"]["play"] = true;
           game["history"] = history.concat([{ ...newStep }]);
           game["step"] = game["step"] + 1;
@@ -158,7 +161,7 @@ const ResultGame = ({ payload, callback }: any) =>
   sagaAssessor(
     () =>
       function* () {
-        console.log("payload", payload);
+        //console.log("payload", payload);
         yield put(actions.GAME.CLEARED(payload));
         (localStorage as any).setItem(
           "minesweeper",
@@ -174,7 +177,7 @@ const UpdateStep = ({ payload, callback }: any) =>
   sagaAssessor(
     () =>
       function* () {
-        console.log("update");
+        //console.log("update");
         const game = yield select(getGame());
         if (!isEmpty(game)) {
           game["step"] = payload;
