@@ -37,6 +37,7 @@ const Board: React.FC = () => {
   const {
     game: { board, flags, times, play },
   } = currentHistory;
+  const tempBoard = JSON.parse(JSON.stringify(board));
   const [playError, setPlayError] = useState(false);
   let textButton = play ? "Pause" : "Play";
 
@@ -103,7 +104,7 @@ const Board: React.FC = () => {
   };
 
   const floodFill = (i: any, j: any) => {
-    if (!isValid(i, j) || board[i][j].opened === true) {
+    if (!isValid(i, j) || tempBoard[i][j].opened === true) {
       return;
     }
 
@@ -112,9 +113,9 @@ const Board: React.FC = () => {
     //   return;
     // }
 
-    if (Number(board[i][j].number) > 0) {
+    if (Number(tempBoard[i][j].number) > 0) {
       //board[i][j].reveal();
-      board[i][j].opened = true;
+      tempBoard[i][j].opened = true;
       // dispatch(
       //   actions.GAME.UPDATED_CELL_OPEN({
       //     row: i,
@@ -124,9 +125,9 @@ const Board: React.FC = () => {
       return;
     }
 
-    if (Number(board[i][j].number) === 0) {
+    if (Number(tempBoard[i][j].number) === 0) {
       //board[i][j].reveal();
-      board[i][j].opened = true;
+      tempBoard[i][j].opened = true;
       // dispatch(
       //   actions.GAME.UPDATED_CELL_OPEN({
       //     row: i,
@@ -156,7 +157,7 @@ const Board: React.FC = () => {
         if (!classes.contains(classOpen) && !classes.contains(classFlag)) {
           floodFill(Number(coordinats[0]), Number(coordinats[1]));
           //classes.add(classOpen);
-          dispatch(actions.GAME.UPDATED_CELL_OPEN(board));
+          dispatch(actions.GAME.UPDATED_CELL_OPEN(tempBoard));
 
           if (!classes.contains(classMine)) {
             soundMouseClick();
