@@ -1,5 +1,5 @@
+export * from "./constants";
 export * from "./creators";
 export * from "./forms";
-export * from "./createBoard";
-export * from "./generateGame";
+export * from "./generateBoard";
 export * from "./checkWinner";

@@ -1,9 +1,8 @@
 import { ROUTES_PATH } from "./constants";
 
 import Welcome from "components/Welcome";
-import Board from "components/Board";
+import Game from "components/Game";
 import Result from "components/Result";
-
 interface RouteType {
   path: string;
   component: React.FC;
@@ -20,7 +19,7 @@ export const publicRouter: Array<RouteType> = [
   },
   {
     path: ROUTES_PATH.GAME,
-    component: Board,
+    component: Game,
     exact: true,
     children: [],
   },

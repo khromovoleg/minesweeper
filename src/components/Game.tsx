@@ -1,15 +1,16 @@
-import React, { BaseSyntheticEvent, useState } from "react";
+import React, { BaseSyntheticEvent, useState, useEffect } from "react";
 
 import { useDispatch, useSelector } from "react-redux";
 import { push } from "connected-react-router";
 import { isEmpty } from "lodash";
 import useSound from "use-sound";
 
-import { GenerateBoard, checkWinner } from "utils";
+import { checkWinner } from "utils";
 import { getGame } from "components/store/selectors";
 import { actions } from "store/actions";
 import { ROUTES_PATH } from "router/constants";
 
+import Table from "components/Table";
 import Timer from "components/Timer";
 
 import soundFlagFile from "sounds/soundFlag.wav";
@@ -20,26 +21,20 @@ import soundErrorFile from "sounds/soundError.wav";
 
 import "styles/index.scss";
 
-const Board: React.FC = () => {
+const Game: React.FC = () => {
   const dispatch = useDispatch();
   const { settings, history, step } = useSelector(getGame());
   const { rows, cols } = settings;
-  //const [step, setStep] = useState(history.length - 1);
-  //const step = history.length - 1;
-  //console.log("history", history);
   const currentHistory = history[step];
-  //console.log("currentHistory", currentHistory);
-  const prev = history[step - 1] ? step - 1 : null;
-  const next = history[step + 1] ? step + 1 : null;
-
-  // console.log("prev", prev);
-  // console.log("next", next);
   const {
     game: { board, flags, times, play },
   } = currentHistory;
   const tempBoard = JSON.parse(JSON.stringify(board));
   const [playError, setPlayError] = useState(false);
+  const [checkWinStatus, setCheckWinStatus] = useState(false);
   let textButton = play ? "Pause" : "Play";
+  const prev = history[step - 1] ? step - 1 : null;
+  const next = history[step + 1] ? step + 1 : null;
 
   const [soundFlag] = useSound(soundFlagFile);
   const [soundMine] = useSound(soundMineFile);
@@ -61,6 +56,8 @@ const Board: React.FC = () => {
           step: minesweeper.step,
         })
       );
+    } else {
+      dispatch(push(ROUTES_PATH.WELCOME));
     }
   }
 
@@ -79,26 +76,6 @@ const Board: React.FC = () => {
     changeTextButton();
   };
 
-  const checkWin = checkWinner(board);
-
-  if (checkWin) {
-    //changeTextButton();
-  }
-
-  // console.log("step", step);
-  // console.log("history[step]", history[step]);
-  // console.log("checkWin", checkWin);
-
-  if (checkWin) {
-    dispatch(actions.GAME.RESULT(true));
-  }
-
-  // setTimeout(() => {
-  //   if (checkWin) {
-  //     dispatch(actions.GAME.RESULT(true));
-  //   }
-  // }, 0);
-
   const isValid = (i: any, j: any) => {
     return i >= 0 && i < rows && j >= 0 && j < cols;
   };
@@ -108,40 +85,21 @@ const Board: React.FC = () => {
       return;
     }
 
-    // console.log(board[i][j], i, j);
-    // if () {
-    //   return;
-    // }
-
     if (Number(tempBoard[i][j].number) > 0) {
-      //board[i][j].reveal();
       tempBoard[i][j].opened = true;
-      // dispatch(
-      //   actions.GAME.UPDATED_CELL_OPEN({
-      //     row: i,
-      //     col: j,
-      //   })
-      // );
       return;
     }
 
-    if (Number(tempBoard[i][j].number) === 0) {
-      //board[i][j].reveal();
+    if (
+      Number(tempBoard[i][j].number) === 0 &&
+      tempBoard[i][j].number !== null
+    ) {
       tempBoard[i][j].opened = true;
-      // dispatch(
-      //   actions.GAME.UPDATED_CELL_OPEN({
-      //     row: i,
-      //     col: j,
-      //   })
-      // );
+
       floodFill(i, j - 1);
       floodFill(i, j + 1);
       floodFill(i - 1, j);
       floodFill(i + 1, j);
-      // board[i][j].floodFill(i, j - 1);
-      // board[i][j].floodFill(i, j + 1);
-      // board[i][j].floodFill(i - 1, j);
-      // board[i][j].floodFill(i + 1, j);
     }
   };
 
@@ -156,7 +114,7 @@ const Board: React.FC = () => {
       if (e.type === "click") {
         if (!classes.contains(classOpen) && !classes.contains(classFlag)) {
           floodFill(Number(coordinats[0]), Number(coordinats[1]));
-          //classes.add(classOpen);
+
           dispatch(actions.GAME.UPDATED_CELL_OPEN(tempBoard));
 
           if (!classes.contains(classMine)) {
@@ -165,38 +123,26 @@ const Board: React.FC = () => {
             soundMine();
           }
 
-          // dispatch(
-          //   actions.GAME.UPDATED_CELL_OPEN({
-          //     row: coordinats[0],
-          //     col: coordinats[1],
-          //   })
-          // );
-          //console.log("board222", board);
-          //const checkWin = checkWinner(board);
-
           if (classes.contains(classMine)) {
             changeTextButton();
           }
 
-          //console.log("step1111", step);
-          // console.log("history[step]", history[step]);
-          // console.log("checkWin", checkWin);
-
           setTimeout(() => {
-            // if (checkWin) {
-            //   dispatch(actions.GAME.RESULT(true));
-            // }
-
             if (classes.contains(classMine)) {
               dispatch(actions.GAME.RESULT(false));
             }
           }, 2000);
+
+          setCheckWinStatus(true);
+          classes.add(classOpen);
         }
       } else if (e.type === "contextmenu") {
         e.preventDefault();
         soundFlag();
+
         if (!classes.contains(classOpen)) {
           let flagsCount = flags;
+
           if (!classes.contains(classFlag)) {
             classes.add(classFlag);
             flagsCount--;
@@ -204,6 +150,7 @@ const Board: React.FC = () => {
             classes.remove(classFlag);
             flagsCount++;
           }
+
           dispatch(
             actions.GAME.UPDATED_CELL_FLAG({
               cell: {
@@ -213,14 +160,10 @@ const Board: React.FC = () => {
               flagsCount,
             })
           );
-          //dispatch(actions.GAME.UPDATED_MINES(flagsCount));
         }
       }
 
-      //console.log("!!!!!!!!!!!!!!!!!!!11111", next);
       if (next !== null) {
-        //console.log("!!!!!!!!!!!!!!!!!!!2222", next);
-        //setStep(next);
         handleNavClick(next);
       }
     } else {
@@ -233,9 +176,24 @@ const Board: React.FC = () => {
   const handleNavClick = (step: number | null): void => {
     if (step !== null) {
       dispatch(actions.GAME.UPDATED_STEP(step));
-      //setStep(step);
     }
   };
+
+  useEffect(() => {
+    if (checkWinStatus) {
+      const checkWin = checkWinner(tempBoard);
+
+      setTimeout(() => {
+        if (checkWin) {
+          dispatch(actions.GAME.RESULT(true));
+        }
+      }, 2000);
+    }
+
+    return () => {
+      setCheckWinStatus(false);
+    };
+  }, [checkWinStatus]);
 
   return (
     <div className="board">
@@ -275,7 +233,7 @@ const Board: React.FC = () => {
             ) : null}
           </div>
           <div id="table" className="board__table">
-            <GenerateBoard board={board} handleClickCell={handleClickCell} />
+            <Table board={board} handleClickCell={handleClickCell} />
           </div>
           <div className="board__nav">
             <button
@@ -316,4 +274,4 @@ const Board: React.FC = () => {
   );
 };
 
-export default Board;
+export default Game;

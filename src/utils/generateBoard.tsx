@@ -1,4 +1,4 @@
-export const generateGame = (props: any) => {
+export const generateBoard = (props: any) => {
   const { rows, cols, mines } = props;
 
   const valueCells = {
@@ -19,13 +19,16 @@ export const generateGame = (props: any) => {
 
   // generate mines
   const minesArray = [];
+
   for (let i = 0; i < mines; i++) {
     const new_mine = { row: 0, col: 0 };
     let new_mine_valid = false;
+
     while (!new_mine_valid) {
       new_mine.row = Math.floor(Math.random() * rows);
       new_mine.col = Math.floor(Math.random() * cols);
       new_mine_valid = true;
+
       for (let j = 0; j < minesArray.length; j++) {
         if (
           minesArray[j].row == new_mine.row &&
@@ -34,6 +37,7 @@ export const generateGame = (props: any) => {
           new_mine_valid = false;
       }
     }
+
     minesArray.push(new_mine);
     cellsArray[new_mine.row][new_mine.col] = { ...valueCells, mine: true };
   }
@@ -43,6 +47,7 @@ export const generateGame = (props: any) => {
       if (!cellsArray[r][c].mine) {
         // calculate number of ajacent mines
         let number = 0;
+
         for (let a = r - 1; a <= r + 1; a++) {
           for (let b = c - 1; b <= c + 1; b++) {
             for (let j = 0; j < minesArray.length; j++) {
@@ -50,6 +55,7 @@ export const generateGame = (props: any) => {
             }
           }
         }
+
         cellsArray[r][c] = { ...valueCells, number: number.toString() };
       }
     }

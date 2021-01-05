@@ -10,7 +10,6 @@ interface MyProps {
 }
 
 const Timer: React.FC<MyProps> = ({ play, times }: MyProps) => {
-  //const [time, setTime] = useState(0);
   const dispatch = useDispatch();
   let intervalId: any = null;
 

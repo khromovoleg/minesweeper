@@ -5,7 +5,6 @@ const types: Array<string> = [
   "SUCCEEDED",
   "FAILED",
   "CLEARED",
-  //"UPDATED_MINES",
   "UPDATED_TIMES",
   "UPDATED_CELL_OPEN",
   "UPDATED_CELL_FLAG",
@@ -23,6 +22,7 @@ export const actionConstantsCreator = (constArr: Array<string>): Result => {
 
   constArr.forEach((constItem) => {
     result[constItem] = {};
+
     types.forEach((typeItem) => {
       result[constItem][typeItem] = `${constItem}_${typeItem}`;
     });
@@ -36,6 +36,7 @@ export const actionCreator = (constArr: Array<string>): Result => {
 
   constArr.forEach((constItem) => {
     result[constItem] = {};
+
     types.forEach((typeItem) => {
       result[constItem][typeItem] = (
         payload = {},

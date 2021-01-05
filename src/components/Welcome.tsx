@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { Formik, Form } from "formik";
 
 import { actions } from "store/actions";
-import { FORMS, generateGame } from "utils";
+import { FORMS, generateBoard, levels } from "utils";
 
 import "styles/index.scss";
 
@@ -16,37 +16,11 @@ const Welcome: React.FC = () => {
   const dispatch = useDispatch();
   const [level, setLevel] = useState("simple");
   const [classHide, setClassHide] = useState("hide");
-  const [initialValues, setinitialValues] = useState(FORMS.BOARD_SIZE.INIT);
-
-  const levels = [
-    {
-      level: "simple",
-      rows: 5,
-      cols: 5,
-      mines: 5,
-    },
-    {
-      level: "medium",
-      rows: 10,
-      cols: 10,
-      mines: 20,
-    },
-    {
-      level: "hard",
-      rows: 15,
-      cols: 15,
-      mines: 30,
-    },
-    {
-      level: "custom",
-      rows: 0,
-      cols: 0,
-      mines: 0,
-    },
-  ];
+  const [initialValues, setInitialValues] = useState(FORMS.BOARD_SIZE.INIT);
 
   const handleSubmit = (data: FormDataType) => {
-    const { board, mines } = generateGame(data);
+    const { board, mines } = generateBoard(data);
+
     dispatch(
       actions.GAME.REQUESTED({
         settings: data,
@@ -62,15 +36,14 @@ const Welcome: React.FC = () => {
   };
 
   const handleChange = (e: BaseSyntheticEvent) => {
-    //console.log(levels.find((item) => item.level === e.currentTarget.value));
     setLevel(e.currentTarget.value);
   };
 
   useEffect(() => {
-    setinitialValues(
+    setInitialValues(
       levels.find((item) => item.level === level) || FORMS.BOARD_SIZE.INIT
     );
-    console.log(initialValues);
+
     setClassHide(level !== "custom" ? "hide" : "");
   }, [level]);
 
@@ -109,7 +82,6 @@ const Welcome: React.FC = () => {
           setFieldValue,
           setFieldTouched,
         }) => {
-          console.log(cols);
           const handleChangeField = (e: BaseSyntheticEvent) => {
             const fieldValue = e.currentTarget.value;
             const fieldName = e.currentTarget.name;
